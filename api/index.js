@@ -14,6 +14,10 @@ app.use(cors({
   credentials: true
 }));
 
+app.get('/', (req, res) => {
+  res.redirect('https://flash-green.arcktis.fr/');
+});
+
 // Gestion de l'arrêt du serveur
 process.on('SIGINT', async () => {
   console.log('Gracefully shutting down...');
