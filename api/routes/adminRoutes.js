@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const adminController = require('../controllers/adminController');
+const adminController = require('../controllers/adminControllers');
 const authenticateToken = require('../middleware/authMiddleware');
 
 router.get('/users', authenticateToken, adminController.getAllUsers);
