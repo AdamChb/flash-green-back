@@ -1,22 +1,41 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { initPool, closePool, handleDatabaseError } = require('./db'); // Importer handleDatabaseError
+const { initPool, closePool, handleDatabaseError } = require('./db');
 const app = express();
 
-initPool(); // Initialiser le pool de connexions à la base de données
+const authRoutes = require('./routes/authRoutes');
+const questionRoutes = require('./routes/questionRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
-app.use(bodyParser.json());
+const pool = initPool(); // Initialiser le pool de connexions à la base de données
+
+const allowedOrigins = [
+  'https://flash-green.arcktis.fr',
+  'https://flash-green.v2.arcktis.fr/'
+];
 app.use(cors({
-  origin: 'https://flash-green.arcktis.fr',
+  origin: (origin, callback) => {
+    // Autoriser les requêtes sans origine (par exemple, Postman)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
+app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.redirect('https://flash-green.arcktis.fr/');
 });
+
+app.use('/api/auth', authRoutes);
+app.use('/api/questions', questionRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Gestion de l'arrêt du serveur
 process.on('SIGINT', async () => {
@@ -44,4 +63,4 @@ process.on('unhandledRejection', async (reason) => {
   process.exit(1);
 });
 
-module.exports = app;
+module.exports = { app, pool };

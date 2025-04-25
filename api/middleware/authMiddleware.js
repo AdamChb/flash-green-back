@@ -1,0 +1,20 @@
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config();
+const JWT_SECRET = process.env.JWT_SECRET
+
+function authenticateToken(req, res, next) {
+    const token = req.headers['authorization'];
+    if (!token) return res.sendStatus(401); // Unauthorized
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403); // Forbidden
+        if (!user || !user.id) return res.sendStatus(401); // Unauthorized
+        req.user = user;
+        next();
+    });
+}
+
+module.exports = {
+    authenticateToken
+};
