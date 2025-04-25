@@ -33,3 +33,6 @@ jspm_packages/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Documentation
+*.pdf
