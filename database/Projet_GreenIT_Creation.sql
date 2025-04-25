@@ -10,8 +10,7 @@ CREATE TABLE Question(
 
 CREATE TABLE Personne(
    ID_personne INT,
-   Nom VARCHAR(50) NOT NULL,
-   Prenom VARCHAR(50) NOT NULL,
+   Pseudo VARCHAR(50) NOT NULL,
    Email VARCHAR(100) NOT NULL,
    Mot_de_passe VARCHAR(100) NOT NULL,
    Role_User INT NOT NULL,

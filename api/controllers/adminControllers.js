@@ -5,11 +5,11 @@ const Admin = require('../models/adminModels');
 const getAllUsers = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
-        if (!req.user.role || req.user.role !== 0) {
+        if (req.user.role !== 0) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const users = await Admin.getAllUsers();
@@ -22,11 +22,11 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
-        if (!req.user.role || req.user.role !== 0) {
+        if (req.user.role !== 0) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const user = await Admin.getUserById(req.params.id);
@@ -42,18 +42,17 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
-        if (!req.user.role || req.user.role !== 0) {
+        if (req.user.role !== 0) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
-        pass
-        const { username, password, role } = req.body;
+        const { username, email, password, role } = req.body;
         const hashedPassword = await bwcrypt.hash(password, 10);
-        const newUser = await Admin.createUser(username, hashedPassword, role);
-        res.status(201).json(newUser);
+        const newUser = await Admin.createUser(username, email, hashedPassword, role);
+        res.status(200).json({ message: 'User creeated successfully'});
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -62,16 +61,16 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
-        if (!req.user.role || req.user.role !== 0) {
+        if (req.user.role !== 0) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
-        const { username, role } = req.body;
-        const updatedUser = await Admin.updateUser(req.params.id, username, role);
-        res.status(200).json(updatedUser);
+        const { username, email, role } = req.body;
+        const updatedUser = await Admin.updateUser(req.params.id, username, email, role);
+        res.status(200).json({ message: updatedUser });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -80,15 +79,19 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
-        if (!req.user.role || req.user.role !== 0) {
+        if (req.user.role !== 0) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
-        await Admin.deleteUser(req.params.id);
-        res.status(204).send();
+
+        const deletedUser = await Admin.deleteUser(req.params.id);
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).send({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

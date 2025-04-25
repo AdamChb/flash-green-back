@@ -3,7 +3,7 @@ const Question = require('../models/questionModels');
 const getAllQuestions = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getAllQuestions();
@@ -17,7 +17,7 @@ const getAllQuestions = async (req, res) => {
 const getQuestionById = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const question = await Question.getQuestionById(req.params.id);
@@ -33,11 +33,11 @@ const getQuestionById = async (req, res) => {
 const createQuestion = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
-        if (!req.user.role || (req.user.role !== 0 && req.user.role !== 1)) {
+        if (req.user.role !== 0 && req.user.role !== 1) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const { title, content } = req.body;
@@ -51,11 +51,11 @@ const createQuestion = async (req, res) => {
 const updateQuestion = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
-        if (!req.user.role || (req.user.role !== 0 && req.user.role !== 1)) {
+        if (req.user.role !== 0 && req.user.role !== 1) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const { title, content } = req.body;
@@ -72,11 +72,11 @@ const updateQuestion = async (req, res) => {
 const deleteQuestion = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
-        if (!req.user.role || (req.user.role !== 0 && req.user.role !== 1)) {
+        if (req.user.role !== 0 && req.user.role !== 1) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const deletedQuestion = await Question.deleteQuestion(req.params.id);
@@ -92,7 +92,7 @@ const deleteQuestion = async (req, res) => {
 const getKnownQuestionsByUserId = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getQuestionsByUserId(req.params.userId);
@@ -105,7 +105,7 @@ const getKnownQuestionsByUserId = async (req, res) => {
 const getUnknownQuestionsByUserId = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getUnknownQuestionsByUserId(req.params.userId);
@@ -118,7 +118,7 @@ const getUnknownQuestionsByUserId = async (req, res) => {
 const validateQuestion = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const { questionId, isValid } = req.body;

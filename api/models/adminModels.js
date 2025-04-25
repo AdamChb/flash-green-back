@@ -1,7 +1,7 @@
 const { pool } = require('../db.js');
 
 const getAllUsers = async () => {
-    const query = 'SELECT * FROM Personne';
+    const query = 'SELECT ID_personne, Pseudo, Email, Role_User FROM Personne';
     try {
         const [rows] = await pool.query(query);
         return rows;
@@ -11,7 +11,7 @@ const getAllUsers = async () => {
 };
 
 const getUserById = async (id) => {
-    const query = 'SELECT * FROM Personne WHERE ID_personne = ?';
+    const query = 'SELECT ID_personne, Pseudo, Email, Role_User FROM Personne WHERE ID_personne = ?';
     const values = [id];
     try {
         const [rows] = await pool.query(query, values);
@@ -21,9 +21,9 @@ const getUserById = async (id) => {
     }
 };
 
-const createUser = async (username, password, role) => {
-    const query = 'INSERT INTO Personne (Pseudo, Mot_de_passe, Role_User) VALUES (?, ?, ?) RETURNING *';
-    const values = [username, password, role];
+const createUser = async (username, email, password, role) => {
+    const query = 'INSERT INTO Personne (Pseudo, Email, Mot_de_passe, Role_User) VALUES (?, ?, ?, ?)';
+    const values = [username, email, password, role];
     try {
         const [rows] = await pool.query(query, values);
         return rows[0];
@@ -32,23 +32,24 @@ const createUser = async (username, password, role) => {
     }
 };
 
-const updateUser = async (id, username, password, role) => {
-    const query = 'UPDATE Personne SET Pseudo = ?, Role_User = ? WHERE ID_Personne = ? RETURNING *';
-    const values = [username, password, role, id];
+const updateUser = async (id, username, email, role) => {
+    const query = 'UPDATE Personne SET Pseudo = ?, Email = ?, Role_User = ? WHERE ID_Personne = ?';
+    const values = [username, email, role, id];
     try {
         const [rows] = await pool.query(query, values);
-        return rows[0];
+        return rows.info;
     } catch (error) {
         throw new Error('Error updating user: ' + error.message);
     }
 };
 
 const deleteUser = async (id) => {
-    const query = 'DELETE FROM Personne WHERE ID_Personne = ? RETURNING *';
+    const query = 'DELETE FROM Personne WHERE ID_Personne = ?';
     const values = [id];
     try {
         const [rows] = await pool.query(query, values);
-        return rows[0];
+        console.log(rows);
+        return rows.affectedRows;
     } catch (error) {
         throw new Error('Error deleting user: ' + error.message);
     }
