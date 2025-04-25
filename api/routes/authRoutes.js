@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const authController = require('../controllers/authControllers');
-const authMiddleware = require('../middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/authMiddleware');
 
 // User registration route
 router.post('/register', authController.registerUser);
 router.post('/login', authController.loginUser);
-router.get('/profile', authMiddleware, authController.getUserProfile);
-router.post('/updatepassword', authMiddleware, authController.updatePassword);
-router.post('/updateemail', authMiddleware, authController.updateEmail);
+router.get('/profile', authenticateToken, authController.getUserProfile);
+router.post('/updatepassword', authenticateToken, authController.updatePassword);
+router.post('/updateemail', authenticateToken, authController.updateEmail);

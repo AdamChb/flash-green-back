@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const questionController = require('../controllers/questionControllers');
-const authenticateToken = require('../middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/authMiddleware');
 
 router.get('/', authenticateToken, questionController.getAllQuestions);
 router.get('/:id', authenticateToken, questionController.getQuestionById);
