@@ -10,7 +10,7 @@ const adminRoutes = require('./routes/adminRoutes');
 
 const allowedOrigins = [
   'https://flash-green.arcktis.fr',
-  'https://flash-green.v2.arcktis.fr/'
+  'https://flash-green.v2.arcktis.fr'
 ];
 app.use(cors({
   origin: (origin, callback) => {
