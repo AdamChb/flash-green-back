@@ -1,4 +1,4 @@
-const { pool } = require('../index.js');
+const { pool } = require('../db.js');
 
 const findByEmail = async ({ email }) => {  
   const query = 'SELECT * FROM Peronne WHERE Email = $1';

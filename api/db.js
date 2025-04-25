@@ -45,4 +45,6 @@ async function handleDatabaseError(err) {
   }
 }
 
-module.exports = { initPool, closePool, handleDatabaseError };
+pool = initPool(); // Initialiser le pool au démarrage du module
+
+module.exports = { pool, initPool, closePool, handleDatabaseError };

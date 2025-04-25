@@ -1,14 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { initPool, closePool, handleDatabaseError } = require('./db');
+const { closePool, handleDatabaseError } = require('./db');
 const app = express();
 
 const authRoutes = require('./routes/authRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
-const pool = initPool(); // Initialiser le pool de connexions à la base de données
 
 const allowedOrigins = [
   'https://flash-green.arcktis.fr',
@@ -63,4 +61,4 @@ process.on('unhandledRejection', async (reason) => {
   process.exit(1);
 });
 
-module.exports = { app, pool };
+module.exports = app;

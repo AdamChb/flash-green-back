@@ -1,4 +1,4 @@
-const { pool } = require('../index.js');
+const { pool } = require('../db.js');
 
 const getAllQuestions = async () => {
     const query = 'SELECT * FROM Question';
