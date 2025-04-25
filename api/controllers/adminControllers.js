@@ -1,6 +1,6 @@
 const bwcrypt = require('bcrypt');
 
-const Admin = require('../models/adminModel');
+const Admin = require('../models/adminModels');
 
 const getAllUsers = async (req, res) => {
     try {
