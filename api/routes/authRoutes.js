@@ -10,3 +10,5 @@ router.post('/login', authController.loginUser);
 router.get('/profile', authenticateToken, authController.getUserProfile);
 router.post('/updatepassword', authenticateToken, authController.updatePassword);
 router.post('/updateemail', authenticateToken, authController.updateEmail);
+
+module.exports = router;

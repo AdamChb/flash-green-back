@@ -11,3 +11,5 @@ router.put('/:id', authenticateToken, questionController.updateQuestion);
 router.delete('/:id', authenticateToken, questionController.deleteQuestion);
 router.get('/user/:userId', authenticateToken, questionController.getQuestionsByUserId);
 router.post('/validate', authenticateToken, questionController.validateQuestion);
+
+module.exports = router;
