@@ -20,13 +20,11 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
-    const newUser = new User({
+    const newUser = await User.createUser({
       username,
       email,
       password: hashedPassword,
     });
-
-    await newUser.createUser();
 
     res.status(201).json({ 
         message: "User registered successfully" ,
@@ -53,22 +51,22 @@ const loginUser = async (req, res) => {
     }
 
     // Check if the password is correct
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.Mot_de_passe); // Utilisez le bon nom de colonne
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "3h" });
+    const token = jwt.sign({ id: user.ID_personne }, JWT_SECRET, { expiresIn: "3h" });
 
     res.status(200).json({
       message: "Login successful",
       token,
       user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
+        id: user.ID_personne,
+        username: user.Pseudo,
+        email: user.Email,
+        role: user.Role, // Assurez-vous que la colonne `Role` existe si utilisée
       },
     });
 
@@ -83,17 +81,17 @@ const getUserProfile = async (req, res) => {
     
     try {
         // Find the user by ID
-        const user = await User.findById({ userId });
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
         // Return user profile information (excluding password)
         res.status(200).json({
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            role: user.role,
+            id: user.ID_personne,
+            username: user.Pseudo,
+            email: user.Mot_de_passe,
+            role: user.Role_User,
         });
     } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -113,7 +111,7 @@ const updatePassword = async (req, res) => {
         }
 
         // Check if the old password is correct
-        const isOldPasswordValid = await bcrypt.compare(oldPassword, user.password);
+        const isOldPasswordValid = await bcrypt.compare(oldPassword, user.Mot_de_passe);
         if (!isOldPasswordValid) {
             return res.status(401).json({ message: "Invalid old password" });
         }
@@ -123,7 +121,7 @@ const updatePassword = async (req, res) => {
 
         // Update the user's password
         user.password = hashedNewPassword;
-        await user.updatePassword(userId, hashedNewPassword);
+        await User.updatePassword({ id: userId, newPassword: hashedNewPassword });
 
         res.status(200).json({ message: "Password updated successfully" });
     } catch (error) {
@@ -144,8 +142,7 @@ const updateEmail = async (req, res) => {
         }
 
         // Update the user's email
-        user.email = newEmail;
-        await user.updateEmail(userId, newEmail);
+        await User.updateEmail(userId, newEmail);
 
         res.status(200).json({ message: "Email updated successfully" });
     } catch (error) {
