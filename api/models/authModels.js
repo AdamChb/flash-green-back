@@ -1,7 +1,7 @@
 const { pool } = require('../db.js');
 
 const findByEmail = async ({ email }) => {  
-  const query = 'SELECT * FROM Peronne WHERE Email = $1';
+  const query = 'SELECT * FROM Personne WHERE Email = $1';
   const values = [email];
 
   try {
