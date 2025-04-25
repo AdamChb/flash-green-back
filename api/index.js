@@ -26,7 +26,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.get('/', (req, res) => {
   res.redirect('https://flash-green.arcktis.fr/');
 });
