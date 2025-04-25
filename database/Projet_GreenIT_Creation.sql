@@ -23,7 +23,7 @@ ALTER TABLE Personne ADD CONSTRAINT CHK_Role_User CHECK (Role_User IN (0, 1, 2))
 CREATE TABLE Personne_Questions(
    ID_personne INT NOT NULL,
    ID_question INT NOT NULL,
-   Connue BOOLEAN NOT NULL DEFAULT 0,
+   Valide BOOLEAN NOT NULL DEFAULT 0,
    PRIMARY KEY(ID_personne, ID_question),
    FOREIGN KEY(ID_personne) REFERENCES Personne(ID_personne),
    FOREIGN KEY(ID_question) REFERENCES Question(ID_question)

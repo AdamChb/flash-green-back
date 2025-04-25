@@ -7,6 +7,7 @@ const getAllQuestions = async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getAllQuestions();
+        console.log('All questions fetched successfully:', questions);
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -82,19 +83,32 @@ const deleteQuestion = async (req, res) => {
         if (!deletedQuestion) {
             return res.status(404).json({ message: 'Question not found' });
         }
-        res.status(204).send();
+        res.status(200).send({ message: 'Question deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-const getQuestionsByUserId = async (req, res) => {
+const getKnownQuestionsByUserId = async (req, res) => {
     try {
         // Check if the user is authenticated
         if (!req.user || !req.user.id) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getQuestionsByUserId(req.params.userId);
+        res.status(200).json(questions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getUnknownQuestionsByUserId = async (req, res) => {
+    try {
+        // Check if the user is authenticated
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const questions = await Question.getUnknownQuestionsByUserId(req.params.userId);
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -108,11 +122,11 @@ const validateQuestion = async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const { questionId, isValid } = req.body;
-        const validatedQuestion = await Question.validateQuestion(questionId, req.user.id);
+        const validatedQuestion = await Question.validateQuestion(questionId, req.user.id, isValid);
         if (!validatedQuestion) {
             return res.status(404).json({ message: 'Question not found' });
         }
-        res.status(200).json(validatedQuestion);
+        res.status(200).json({ message: 'Question validated successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -124,6 +138,7 @@ module.exports = {
     createQuestion,
     updateQuestion,
     deleteQuestion,
-    getQuestionsByUserId,
+    getKnownQuestionsByUserId,
+    getUnknownQuestionsByUserId,
     validateQuestion
 };
