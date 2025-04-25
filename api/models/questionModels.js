@@ -12,7 +12,7 @@ const getAllQuestions = async () => {
 };
 
 const getQuestionById = async (id) => {
-    const query = 'SELECT * FROM Question WHERE ID_Question = $1';
+    const query = 'SELECT * FROM Question WHERE ID_Question = ?';
     const values = [id];
     try {
         const result = await pool.query(query, values);
@@ -24,7 +24,7 @@ const getQuestionById = async (id) => {
 };
 
 const createQuestion = async (title, content) => {
-    const query = 'INSERT INTO Question (Intitule, Reponse) VALUES ($1, $2) RETURNING *';
+    const query = 'INSERT INTO Question (Intitule, Reponse) VALUES (?, ?) RETURNING *';
     const values = [title, content];
     try {
         const result = await pool.query(query, values);
@@ -36,7 +36,7 @@ const createQuestion = async (title, content) => {
 };
 
 const updateQuestion = async (id, title, content) => {
-    const query = 'UPDATE Question SET Intitule = $1, Reponse = $2 WHERE ID_Question = $3 RETURNING *';
+    const query = 'UPDATE Question SET Intitule = ?, Reponse = ? WHERE ID_Question = ? RETURNING *';
     const values = [title, content, id];    
     try {
         const result = await pool.query(query, values);
@@ -48,7 +48,7 @@ const updateQuestion = async (id, title, content) => {
 };
 
 const deleteQuestion = async (id) => {
-    const query = 'DELETE FROM Question WHERE ID_Question = $1 RETURNING *';
+    const query = 'DELETE FROM Question WHERE ID_Question = ? RETURNING *';
     const values = [id];
     try {
         const result = await pool.query(query, values);
@@ -60,7 +60,7 @@ const deleteQuestion = async (id) => {
 };
 
 const getQuestionsByUserId = async (userId) => {
-    const query = 'SELECT * FROM Question WHERE ID_User = $1';
+    const query = 'SELECT * FROM Question WHERE ID_User = ?';
     const values = [userId];
     try {
         const result = await pool.query(query, values);
@@ -72,7 +72,7 @@ const getQuestionsByUserId = async (userId) => {
 };
 
 const validateQuestion = async (questionId, userId) => {
-    const query = 'INSERT INTO Personne_Questions (ID_Question, ID_Personne, Connue) VALUES ($1, $2, $3) RETURNING *';
+    const query = 'INSERT INTO Personne_Questions (ID_Question, ID_Personne, Connue) VALUES (?, ?, ?) RETURNING *';
     const values = [questionId, userId, 1];
     try {
         const result = await pool.query(query, values);

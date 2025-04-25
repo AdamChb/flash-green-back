@@ -1,7 +1,7 @@
 const { pool } = require('../db.js');
 
 const findByEmail = async ({ email }) => {  
-  const query = 'SELECT * FROM Personne WHERE Email = $1';
+  const query = 'SELECT * FROM Personne WHERE Email = ?';
   const values = [email];
 
   try {
@@ -14,7 +14,7 @@ const findByEmail = async ({ email }) => {
 };
 
 const findById = async ({ id }) => {
-    const query = 'SELECT * FROM Personne WHERE ID_personne = $1';
+    const query = 'SELECT * FROM Personne WHERE ID_personne = ?';
     const values = [id];
     
     try {
@@ -27,7 +27,7 @@ const findById = async ({ id }) => {
 };
 
 const createUser = async ({ username, email, password }) => {
-    const query = 'INSERT INTO Personne (Pseudo, Email, Mot_de_passe) VALUES ($1, $2, $3) RETURNING *';
+    const query = 'INSERT INTO Personne (Pseudo, Email, Mot_de_passe) VALUES (?, ?, ?) RETURNING *';
     const values = [username, email, password];
 
     try {
@@ -40,7 +40,7 @@ const createUser = async ({ username, email, password }) => {
 };
 
 const updatePassword = async ({ id, newPassword }) => {
-    const query = 'UPDATE Personne SET Mot_de_passe = $1 WHERE ID_personne = $2 RETURNING *';
+    const query = 'UPDATE Personne SET Mot_de_passe = ? WHERE ID_personne = ? RETURNING *';
     const values = [newPassword, id];
 
     try {
@@ -53,7 +53,7 @@ const updatePassword = async ({ id, newPassword }) => {
 };
 
 const updateEmail = async ({ id, newEmail }) => {
-    const query = 'UPDATE Personne SET Email = $1 WHERE ID_personne = $2 RETURNING *';
+    const query = 'UPDATE Personne SET Email = ? WHERE ID_personne = ? RETURNING *';
     const values = [newEmail, id];
 
     try {

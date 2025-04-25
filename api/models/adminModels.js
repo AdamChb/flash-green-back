@@ -11,7 +11,7 @@ const getAllUsers = async () => {
 };
 
 const getUserById = async (id) => {
-    const query = 'SELECT * FROM Personne WHERE ID_personne = $1';
+    const query = 'SELECT * FROM Personne WHERE ID_personne = ?';
     const values = [id];
     try {
         const [rows] = await pool.query(query, values);
@@ -22,7 +22,7 @@ const getUserById = async (id) => {
 };
 
 const createUser = async (username, password, role) => {
-    const query = 'INSERT INTO Personne (Pseudo, Mot_de_passe, Role_User) VALUES ($1, $2, $3) RETURNING *';
+    const query = 'INSERT INTO Personne (Pseudo, Mot_de_passe, Role_User) VALUES (?, ?, ?) RETURNING *';
     const values = [username, password, role];
     try {
         const [rows] = await pool.query(query, values);
@@ -33,7 +33,7 @@ const createUser = async (username, password, role) => {
 };
 
 const updateUser = async (id, username, password, role) => {
-    const query = 'UPDATE Personne SET Pseudo = $1, Role_User = $2 WHERE ID_Personne = $3 RETURNING *';
+    const query = 'UPDATE Personne SET Pseudo = ?, Role_User = ? WHERE ID_Personne = ? RETURNING *';
     const values = [username, password, role, id];
     try {
         const [rows] = await pool.query(query, values);
@@ -44,7 +44,7 @@ const updateUser = async (id, username, password, role) => {
 };
 
 const deleteUser = async (id) => {
-    const query = 'DELETE FROM Personne WHERE ID_Personne = $1 RETURNING *';
+    const query = 'DELETE FROM Personne WHERE ID_Personne = ? RETURNING *';
     const values = [id];
     try {
         const [rows] = await pool.query(query, values);
