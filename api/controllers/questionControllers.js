@@ -7,7 +7,7 @@ const getAllQuestions = async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getAllQuestions();
-        console.log('All questions fetched successfully:', questions);
+        console.log(questions);
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: error.message });
