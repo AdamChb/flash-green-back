@@ -1,4 +1,4 @@
-const Question = require('../models/questionModels');
+const Question = require("../models/questionModels");
 
 const getAllQuestions = async (req, res) => {
     try {
@@ -7,7 +7,6 @@ const getAllQuestions = async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getAllQuestions();
-        console.log(questions);
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -133,12 +132,12 @@ const validateQuestion = async (req, res) => {
 };
 
 module.exports = {
-    getAllQuestions,
-    getQuestionById,
-    createQuestion,
-    updateQuestion,
-    deleteQuestion,
-    getKnownQuestionsByUserId,
-    getUnknownQuestionsByUserId,
-    validateQuestion
+  getAllQuestions,
+  getQuestionById,
+  createQuestion,
+  updateQuestion,
+  deleteQuestion,
+  getKnownQuestionsByUserId,
+  getUnknownQuestionsByUserId,
+  validateQuestion,
 };
