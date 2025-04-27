@@ -5,7 +5,7 @@ const Admin = require('../models/adminModels');
 const getAllUsers = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
@@ -22,7 +22,7 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
@@ -42,7 +42,7 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
@@ -61,7 +61,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
@@ -79,7 +79,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')

@@ -1,9 +1,9 @@
-const Question = require("../models/questionModels");
+const Question = require('../models/questionModels');
 
 const getAllQuestions = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getAllQuestions();
@@ -16,7 +16,7 @@ const getAllQuestions = async (req, res) => {
 const getQuestionById = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const question = await Question.getQuestionById(req.params.id);
@@ -32,7 +32,7 @@ const getQuestionById = async (req, res) => {
 const createQuestion = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
@@ -50,7 +50,7 @@ const createQuestion = async (req, res) => {
 const updateQuestion = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
@@ -71,7 +71,7 @@ const updateQuestion = async (req, res) => {
 const deleteQuestion = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         // Check if the user has the required role (e.g., 'admin', 'teacher')
@@ -91,7 +91,7 @@ const deleteQuestion = async (req, res) => {
 const getKnownQuestionsByUserId = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getQuestionsByUserId(req.params.userId);
@@ -104,7 +104,7 @@ const getKnownQuestionsByUserId = async (req, res) => {
 const getUnknownQuestionsByUserId = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const questions = await Question.getUnknownQuestionsByUserId(req.params.userId);
@@ -117,7 +117,7 @@ const getUnknownQuestionsByUserId = async (req, res) => {
 const validateQuestion = async (req, res) => {
     try {
         // Check if the user is authenticated
-        if (!req.user || req.user.role !== 0) {
+        if (!req.user || (!req.user.id && req.user.role !== 0)) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const { questionId, isValid } = req.body;
@@ -132,12 +132,12 @@ const validateQuestion = async (req, res) => {
 };
 
 module.exports = {
-  getAllQuestions,
-  getQuestionById,
-  createQuestion,
-  updateQuestion,
-  deleteQuestion,
-  getKnownQuestionsByUserId,
-  getUnknownQuestionsByUserId,
-  validateQuestion,
+    getAllQuestions,
+    getQuestionById,
+    createQuestion,
+    updateQuestion,
+    deleteQuestion,
+    getKnownQuestionsByUserId,
+    getUnknownQuestionsByUserId,
+    validateQuestion
 };
